@@ -246,8 +246,12 @@ var MouseWork = /*#__PURE__*/function () {
     this.transX = 0.0;
     this.transY = 0.0;
     this.transZ = 0.0;
+    this.mouseX = 0.0;
+    this.mouseY = 0.0;
     var func = this.onWheel.bind(this);
-    document.addEventListener('wheel', func);
+    canvas.addEventListener('wheel', func);
+    func = this.onMouseChangePos.bind(this);
+    document.addEventListener('mousemove', func);
     func = this.onMouseMove.bind(this);
 
     canvas.onmousedown = function (event) {
@@ -264,7 +268,12 @@ var MouseWork = /*#__PURE__*/function () {
   _createClass(MouseWork, [{
     key: "onWheel",
     value: function onWheel(event) {
+      this.mouseX = event.offsetX - 500;
+      this.mouseY = 500 - event.offsetY;
+      this.transX += this.mouseX * (Math.pow(10, this.transZ) - Math.pow(10, this.transZ + event.deltaY * 3 / 10000));
+      this.transY -= this.mouseY * (Math.pow(10, this.transZ) - Math.pow(10, this.transZ + event.deltaY * 3 / 10000));
       this.transZ += event.deltaY * 3 / 10000;
+      return false;
     }
   }, {
     key: "onMouseMove",
@@ -273,6 +282,12 @@ var MouseWork = /*#__PURE__*/function () {
       this.startPosX = event.pageX;
       this.transY += (this.startPosY - event.pageY) * Math.pow(10, this.transZ);
       this.startPosY = event.pageY;
+    }
+  }, {
+    key: "onMouseChangePos",
+    value: function onMouseChangePos(event) {
+      this.mouseX = event.offsetX;
+      this.mouseY = event.offsetY;
     }
   }, {
     key: "getTransX",
