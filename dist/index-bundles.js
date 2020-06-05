@@ -175,6 +175,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shader_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shader.mjs */ "./src/code/shader.mjs");
 /* harmony import */ var _glwork_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./glwork.mjs */ "./src/code/glwork.mjs");
 /* harmony import */ var _mouse_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mouse.mjs */ "./src/code/mouse.mjs");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style.css */ "./src/code/style.css");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_style_css__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
  // let timeMs = Date.now();
@@ -215,6 +218,7 @@ function webGLStart() {
   tick();
 }
 
+console.log(__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module 'child_process'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())).execSync('git log --pretty=format:"%H" -1'));
 webGLStart();
 
 /***/ }),
@@ -397,6 +401,17 @@ var ShaderWork = /*#__PURE__*/function () {
 }();
 
 
+
+/***/ }),
+
+/***/ "./src/code/style.css":
+/*!****************************!*\
+  !*** ./src/code/style.css ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
