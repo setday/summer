@@ -42,7 +42,14 @@ export default class ShaderWork {
   setUniforms (gl, squareVertexPositionBuffer, ...arg) {
     gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
     for (const i of arg) {
-      gl.uniform1f(this.shaderProgram[i.name], i.value);
+      switch (i.type) {
+        case 'float':
+          gl.uniform1f(this.shaderProgram[i.name], i.value);
+          break;
+        case 'int':
+          gl.uniform1i(this.shaderProgram[i.name], i.value);
+          break;
+      }
     }
   }
 }

@@ -175,8 +175,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shader_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shader.mjs */ "./src/code/shader.mjs");
 /* harmony import */ var _glwork_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./glwork.mjs */ "./src/code/glwork.mjs");
 /* harmony import */ var _mouse_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mouse.mjs */ "./src/code/mouse.mjs");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style.css */ "./src/code/style.css");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_style_css__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _texwork_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./texwork.mjs */ "./src/code/texwork.mjs");
+/* harmony import */ var _img_neonflames_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../img/neonflames.png */ "./src/img/neonflames.png");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./style.css */ "./src/code/style.css");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_style_css__WEBPACK_IMPORTED_MODULE_5__);
+
+
 
 
 
@@ -187,6 +191,7 @@ var gl;
 var shdWork;
 var glWork;
 var mouseWork;
+var img1;
 
 function tick() {
   window.requestAnimationFrame(tick); // timeMs = (Date.now() - startTime) / 1000;
@@ -194,17 +199,26 @@ function tick() {
   glWork.setUpToDraw();
   shdWork.setUniforms(gl, glWork.getSquareVertexPositionBuffer, {
     name: 'transX',
+    type: 'float',
     value: mouseWork.getTransX
   }, {
     name: 'transY',
+    type: 'float',
     value: mouseWork.getTransY
   }, {
     name: 'transZ',
+    type: 'float',
     value: mouseWork.getTransZ
   }, {
     name: 'range',
+    type: 'float',
     value: document.getElementById('range1').value
+  }, {
+    name: 'Tex0',
+    type: 'int',
+    value: 0
   });
+  img1.drawTex(gl, 0);
   glWork.draw();
 }
 
@@ -213,12 +227,12 @@ function webGLStart() {
   mouseWork = new _mouse_mjs__WEBPACK_IMPORTED_MODULE_2__["default"](canvas);
   glWork = new _glwork_mjs__WEBPACK_IMPORTED_MODULE_1__["default"](canvas);
   gl = glWork.getGL;
-  shdWork = new _shader_mjs__WEBPACK_IMPORTED_MODULE_0__["default"](gl, 'transX', 'transY', 'transZ', 'range');
+  shdWork = new _shader_mjs__WEBPACK_IMPORTED_MODULE_0__["default"](gl, 'transX', 'transY', 'transZ', 'range', 'Tex0');
   glWork.initBuffers();
+  img1 = new _texwork_mjs__WEBPACK_IMPORTED_MODULE_3__["default"](gl, _img_neonflames_png__WEBPACK_IMPORTED_MODULE_4__["default"]);
   tick();
 }
 
-console.log(__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module 'child_process'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())).execSync('git log --pretty=format:"%H" -1'));
 webGLStart();
 
 /***/ }),
@@ -392,7 +406,16 @@ var ShaderWork = /*#__PURE__*/function () {
 
       for (var _i2 = 0, _arg2 = arg; _i2 < _arg2.length; _i2++) {
         var i = _arg2[_i2];
-        gl.uniform1f(this.shaderProgram[i.name], i.value);
+
+        switch (i.type) {
+          case 'float':
+            gl.uniform1f(this.shaderProgram[i.name], i.value);
+            break;
+
+          case 'int':
+            gl.uniform1i(this.shaderProgram[i.name], i.value);
+            break;
+        }
       }
     }
   }]);
@@ -415,6 +438,78 @@ var ShaderWork = /*#__PURE__*/function () {
 
 /***/ }),
 
+/***/ "./src/code/texwork.mjs":
+/*!******************************!*\
+  !*** ./src/code/texwork.mjs ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TexWork; });
+
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var TexWork = /*#__PURE__*/function () {
+  function TexWork(gl, name) {
+    _classCallCheck(this, TexWork);
+
+    this.texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    this.image = new window.Image();
+    this.image.src = name;
+
+    var func = function func() {
+      gl.bindTexture(gl.TEXTURE_2D, this.texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image);
+    };
+
+    this.image.onload = func.bind(this);
+  }
+
+  _createClass(TexWork, [{
+    key: "drawTex",
+    value: function drawTex(gl, num) {
+      if (num === 0) {
+        gl.activeTexture(gl.TEXTURE0);
+      } else {
+        gl.activeTexture(gl.TEXTURE1);
+      }
+
+      gl.bindTexture(gl.TEXTURE_2D, this.texture);
+    }
+  }]);
+
+  return TexWork;
+}();
+
+
+
+/***/ }),
+
+/***/ "./src/img/neonflames.png":
+/*!********************************!*\
+  !*** ./src/img/neonflames.png ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "c44dc1ba0dab504fb66242e0c998020a.png");
+
+/***/ }),
+
 /***/ "./src/shd/def.fs":
 /*!************************!*\
   !*** ./src/shd/def.fs ***!
@@ -424,7 +519,7 @@ var ShaderWork = /*#__PURE__*/function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("#version 300 es\r\nprecision highp float;\r\n\r\nuniform float uTime;\r\nuniform float transX;\r\nuniform float transY;\r\nuniform float transZ;\r\nuniform float range;\r\n\r\nout vec4 oColor;\r\n\r\nvec2 vec2mulvec2(vec2 a, vec2 b)\r\n{\r\n    return vec2(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x);\r\n}\r\n\r\nfloat Arg(vec2 a)\r\n{\r\n    if (a.x > 0.0)\r\n      return atan(a.y / a.x);\r\n    if (a.x == 0.0)\r\n      return asin(1.0) * sign(a.y);\r\n    return atan(a.y / a.x) + acos(-1.0) * sign(a.y);\r\n}\r\n\r\nvec2 vec2pow(vec2 a, float b)\r\n{\r\n    float fi = Arg(a);\r\n\r\n    return vec2(cos(fi * b), sin(fi * b)) * pow(length(a), b);\r\n}\r\n\r\nfloat vec2rec(vec2 xy)\r\n{\r\n    vec2 z = xy;\r\n    float i;\r\n\r\n    while (length(z) < 2.0 && i < 500.0)\r\n    {\r\n      i++;\r\n      z = vec2pow(z, range) + xy;\r\n    }\r\n\r\n    return i;\r\n}\r\n\r\nvoid main(void)\r\n{\r\n    vec2 xy = vec2(gl_FragCoord);\r\n    xy -= 500.0;\r\n    xy *= pow(10.0, transZ);\r\n    xy += 500.0;\r\n    xy.x += transX;\r\n    xy.y -= transY;\r\n    xy = xy / 1000.0;\r\n    xy.x -= 0.5;\r\n    xy.y -= 0.5;\r\n    float i = vec2rec(xy);\r\n\r\n    oColor = vec4(vec3(1.0 - ((i * 12.2324 / 13.7898) / 500.0 + 0.5), (i * 45.9766 / 54.7898) / 500.0 + 0.65, i / 500.0 + 0.5), 1.0);\r\n}\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("#version 300 es\r\nprecision highp float;\r\n\r\nuniform float uTime;\r\nuniform float transX;\r\nuniform float transY;\r\nuniform float transZ;\r\nuniform float range;\r\nuniform sampler2D Tex0;\r\n\r\nin vec3 TexCoord;\r\n\r\nout vec4 oColor;\r\n\r\nvec2 vec2mulvec2(vec2 a, vec2 b)\r\n{\r\n    return vec2(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x);\r\n}\r\n\r\nfloat Arg(vec2 a)\r\n{\r\n    if (a.x > 0.0)\r\n      return atan(a.y / a.x);\r\n    if (a.x == 0.0)\r\n      return asin(1.0) * sign(a.y);\r\n    return atan(a.y / a.x) + acos(-1.0) * sign(a.y);\r\n}\r\n\r\nvec2 vec2pow(vec2 a, float b)\r\n{\r\n    float fi = Arg(a);\r\n\r\n    return vec2(cos(fi * b), sin(fi * b)) * pow(length(a), b);\r\n}\r\n\r\nfloat vec2rec(vec2 xy)\r\n{\r\n    vec2 z = xy;\r\n    float i;\r\n\r\n    while (length(z) < 2.0 && i < 500.0)\r\n    {\r\n      i++;\r\n      z = vec2pow(z, range) + xy;\r\n    }\r\n\r\n    return i;\r\n}\r\n\r\nvoid main(void)\r\n{\r\n    vec2 xy = vec2(gl_FragCoord);\r\n    xy -= 500.0;\r\n    xy *= pow(10.0, transZ);\r\n    xy += 500.0;\r\n    xy.x += transX;\r\n    xy.y -= transY;\r\n    xy = xy / 1000.0;\r\n    xy.x -= 0.5;\r\n    xy.y -= 0.5;\r\n    float i = vec2rec(xy);\r\n\r\n    oColor = vec4(texture(Tex0, xy).xyz, i / 500.0);\r\n}\r\n");
 
 /***/ }),
 

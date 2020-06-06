@@ -6,6 +6,7 @@ uniform float transX;
 uniform float transY;
 uniform float transZ;
 uniform float range;
+uniform sampler2D Tex0;
 
 out vec4 oColor;
 
@@ -57,5 +58,5 @@ void main(void)
     xy.y -= 0.5;
     float i = vec2rec(xy);
 
-    oColor = vec4(vec3(1.0 - ((i * 12.2324 / 13.7898) / 500.0 + 0.5), (i * 45.9766 / 54.7898) / 500.0 + 0.65, i / 500.0 + 0.5), 1.0);
+    oColor = vec4(texture(Tex0, xy).xyz, i / 500.0);
 }
