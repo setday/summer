@@ -86,6 +86,32 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./date.txt":
+/*!******************!*\
+  !*** ./date.txt ***!
+  \******************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("'Sun Jun 7 21:02:29 2020 +0300'");
+
+/***/ }),
+
+/***/ "./hash.txt":
+/*!******************!*\
+  !*** ./hash.txt ***!
+  \******************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("'dac5f25f465a5242172365cdcf7fbc19bae692c5'");
+
+/***/ }),
+
 /***/ "./src/code/glwork.mjs":
 /*!*****************************!*\
   !*** ./src/code/glwork.mjs ***!
@@ -177,8 +203,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mouse_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mouse.mjs */ "./src/code/mouse.mjs");
 /* harmony import */ var _texwork_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./texwork.mjs */ "./src/code/texwork.mjs");
 /* harmony import */ var _img_neonflames_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../img/neonflames.png */ "./src/img/neonflames.png");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./style.css */ "./src/code/style.css");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_style_css__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _hash_txt__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../hash.txt */ "./hash.txt");
+/* harmony import */ var _date_txt__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./../../date.txt */ "./date.txt");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./style.css */ "./src/code/style.css");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_style_css__WEBPACK_IMPORTED_MODULE_7__);
+
+
 
 
 
@@ -224,6 +254,10 @@ function tick() {
 
 function webGLStart() {
   var canvas = document.getElementById('webglCanvas');
+  var rowhash = document.getElementById('hash');
+  var rowdate = document.getElementById('date');
+  rowhash.innerHTML = 'Hash: ' + String(_hash_txt__WEBPACK_IMPORTED_MODULE_5__["default"]).slice(1, -1);
+  rowdate.innerHTML = 'Date: ' + String(_date_txt__WEBPACK_IMPORTED_MODULE_6__["default"]).slice(1, -1);
   mouseWork = new _mouse_mjs__WEBPACK_IMPORTED_MODULE_2__["default"](canvas);
   glWork = new _glwork_mjs__WEBPACK_IMPORTED_MODULE_1__["default"](canvas);
   gl = glWork.getGL;

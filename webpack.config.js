@@ -20,7 +20,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(glsl|vs|fs)$/,
+        test: /\.(glsl|vs|fs|txt)$/,
         use: {
           loader: 'raw-loader'
         }

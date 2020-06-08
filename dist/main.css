@@ -2,6 +2,24 @@ body{
     background: hsl(35, 81%, 89%);
     overflow: hidden
 }
+#date{
+    color: hsl(194, 100%, 34%);
+    font-size: 60px;
+}
+
+#hash{
+    color: hsl(194, 100%, 34%);
+    font-size: 60px;
+}
+
+#r1{
+    color: hsl(194, 100%, 34%);
+    font-size: 30px;
+}
+
+#range1{
+    width: 800px;
+}
 
 
 /*# sourceMappingURL=main.css.map*/

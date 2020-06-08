@@ -3,6 +3,8 @@ import GLWork from './glwork.mjs';
 import MouseWork from './mouse.mjs';
 import TexWork from './texwork.mjs';
 import img from './../img/neonflames.png';
+import hash from './../../hash.txt';
+import date from './../../date.txt';
 import './style.css';
 
 // let timeMs = Date.now();
@@ -27,6 +29,11 @@ function tick () {
 
 function webGLStart () {
   const canvas = document.getElementById('webglCanvas');
+  const rowhash = document.getElementById('hash');
+  const rowdate = document.getElementById('date');
+
+  rowhash.innerHTML = 'Hash: ' + String(hash).slice(1, -1);
+  rowdate.innerHTML = 'Date: ' + String(date).slice(1, -1);
 
   mouseWork = new MouseWork(canvas);
   glWork = new GLWork(canvas);
